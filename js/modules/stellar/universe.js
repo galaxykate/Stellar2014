@@ -65,7 +65,7 @@ define(["common", "graph", "voronoi", "./regions/region", "./tuning", "./labels"
             for (var i = 0; i < 10; i++) {
                 addWorldTimespan();
             }
-            var range = 1500;
+            var range = 2500;
             activeBox.setPosition(-range / 2, -range / 2);
             activeBox.setDimensions(range, range);
 
@@ -138,8 +138,8 @@ define(["common", "graph", "voronoi", "./regions/region", "./tuning", "./labels"
                 var x = ((star.x - star.x / 2) % w + w) % w - w / 2;
                 var y = ((star.y - star.y / 2) % h + h) % h - h / 2;
 
-                var rate =  (Math.sin(i) + 1);
-                var r = 1.2*Math.sin(i + (t * rate)) + .2;
+                var rate = (Math.sin(i) + 1);
+                var r = 1.2 * Math.sin(i + (t * rate)) + .2;
                 g.noStroke();
                 g.fill(1, 0, 1, r - .2);
                 g.ellipse(x, y, r * .8, r * .8);
@@ -225,9 +225,11 @@ define(["common", "graph", "voronoi", "./regions/region", "./tuning", "./labels"
             universeCamera.screenToPlanar(screenPos, touch.planarPos);
             touch.region = this.getRegionAt(touch.planarPos);
             app.log("set Touched object " + touch.planarPos);
+
             this.activateRegion(touch.region);
         },
 
+        //
         setTouchedObject : function() {
 
             if (touch.region === undefined) {

@@ -63,14 +63,7 @@ define(["common"], function(common) {
                 console.log("Removed " + this);
             });
 
-            this.onClick(function() {
-                console.log("Clicked " + this);
-                /*
-                 app.openCentralPopupObjInfo(obj, function() {
-                 app.zoomToInspect(obj);
-                 });
-                 */
-            });
+        
 
             this.onDblClick(function() {
                 console.log("DBLClicked " + this);
@@ -79,7 +72,7 @@ define(["common"], function(common) {
         },
 
         onTouchEnter : function() {
-            console.log("Enter " + this)
+            console.log("Enter " + this);
         },
 
         onTouchExit : function() {

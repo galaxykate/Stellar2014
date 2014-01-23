@@ -45,6 +45,27 @@ define(["ui", "app", "common", "./universe", "./universeCamera", "./tuning", "./
         //=================================================
         //=================================================
         // Favorite handlers
+        getRandomStarState : function() {
+            var color = "white red blue yellow brown".split(" ");
+
+            var which = Math.floor(Math.random() * Math.random() * 10);
+            switch(which) {
+                case 0:
+                    return "small " + utilities.getRandom(color) + " star";
+                case 1:
+                    return utilities.getRandom(color) + " giant";
+                case 2:
+                    return utilities.getRandom(color) + " supergiant";
+                case 3:
+                    return "collapsing star";
+                case 4:
+                    return "nova";
+                case 4:
+                    return "pulsar";
+                default:
+                    return utilities.getRandom(color) + " star";
+            }
+        },
 
         /// Span styles
         makeSpanColor : function(color, text) {
@@ -65,6 +86,7 @@ define(["ui", "app", "common", "./universe", "./universeCamera", "./tuning", "./
 
             });
         },
+
         openCentralPopupObjInfo : function(obj, onThumbnailClick) {
 
             // Decorate this div to show info about this obj
@@ -197,6 +219,7 @@ define(["ui", "app", "common", "./universe", "./universeCamera", "./tuning", "./
                 var y = p.y - touchwindow.rect.h / 2;
                 var pos = new Vector(x, y);
                 universe.touch.screenPos.setTo(x, y);
+
                 return pos;
             };
 
@@ -232,25 +255,24 @@ define(["ui", "app", "common", "./universe", "./universeCamera", "./tuning", "./
                 // get whats's at the universe
                 var pos = getTouchPos(touchwindow, p);
 
-                if (universe.touch.object) {
-                    console.log("Tapped object ", universe.touch.object);
-                    universe.touch.object.click();
+                if (universe.touch.overObject) {
+
                 }
             });
 
             touchDraw.onTap(function(touchwindow, p) {
                 var pos = getTouchPos(touchwindow, p)
-                if (universe.touch.object) {
-                    console.log("Tapped object ", universe.touch.object);
-                    universe.touch.object.click();
+                console.log("Tapped object ", universe.touch.overObject);
+                if (universe.touch.overObject) {
+                    universe.touch.overObject.click();
                 }
-            })
+            });
 
             touchDraw.onDblTap(function(touchwindow, p) {
                 var pos = getTouchPos(touchwindow, p);
-                if (universe.touch.object) {
-                    console.log("DblTapped object ", universe.touch.object);
-                    universe.touch.object.dblClick();
+                console.log("DblTapped object ", universe.touch.overObject);
+                if (universe.touch.overObject) {
+                    universe.touch.overObject.dblClick();
                 } else
                     universe.zoomTo(universe.touch.planarPos);
             });
@@ -258,7 +280,7 @@ define(["ui", "app", "common", "./universe", "./universeCamera", "./tuning", "./
             touchDraw.onUp(function(touchwindow, p) {
                 universeCamera.drag = .9;
                 universeCamera.force.mult(0);
-            })
+            });
 
             touchDraw.onDown(function(touchwindow, p) {
 

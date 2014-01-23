@@ -51,13 +51,10 @@ define(["common", "../elements/elements"], function(common, Elements) {
 
             var bag = this.bag;
             elementDiv.update = function() {
-                var width = Math.pow(bag.capacity[element.index], .4) * 60;
-                console.log(bag.capacity);
+                var width = Math.pow(bag.capacity[element.index], .4) * 40;
                 var pct = bag.amts[element.index] / bag.capacity[element.index];
 
-                console.log("update div for element " + element.name + " " + pct + " " + width);
-
-                elementDiv.css({
+                 elementDiv.css({
                     width : width + "px",
                 });
                 elementBG.css({

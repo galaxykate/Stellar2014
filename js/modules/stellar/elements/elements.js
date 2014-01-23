@@ -2,7 +2,7 @@
  * @author Kate Compton
  */
 define(["common", "./elementsEncyclopedia"], function(common, elementsEncyclopedia) {
-    var gameElements = ["Helium", "Hydrogen", "Carbon", "Nitrogen", "Oxygen"];
+    var gameElements = ["Helium", "Hydrogen", "Carbon", "Nitrogen", "Oxygen", "Silicon", "Iron", "Gold", "Uranium"];
     // Create the element list
 
     var elementsBySymbol = {};
@@ -18,7 +18,7 @@ define(["common", "./elementsEncyclopedia"], function(common, elementsEncycloped
             symbol : entry.symbol,
             atomicNumber : entry.atomic_number,
             index : index,
-            idColor : new common.KColor((index * .12 + .4) % 1, 1, 1),
+            idColor : new common.KColor((index * .11 + .4) % 1, 1, 1),
         };
         if (index === 0)
             element.idColor = new common.KColor(.45, .3, .8);
@@ -43,6 +43,10 @@ define(["common", "./elementsEncyclopedia"], function(common, elementsEncycloped
             if (el === undefined)
                 throw ("Unable to find element " + query);
             return el;
+        };
+
+        app.getRandomElement = function() {
+            return utilities.getRandom(elements);
         };
 
         // Do something for each element
@@ -76,7 +80,7 @@ define(["common", "./elementsEncyclopedia"], function(common, elementsEncycloped
         fill : function(quantity, rarity) {
 
             for (var i = 0; i < elements.length; i++) {
-                var d = Math.abs(i - rarity*elements.length) / (elements.length / 2);
+                var d = Math.abs(i - rarity * elements.length) / (elements.length / 2);
                 this.amts[i] = Math.floor(quantity * d);
             }
 
@@ -96,11 +100,10 @@ define(["common", "./elementsEncyclopedia"], function(common, elementsEncycloped
         // Quantity rounds down
         add : function(element, qty) {
             var index = element.index;
-            if (this.amts[index] !== undefined) {
+            if (this.amts[index] === undefined) {
                 this.amts[index] = 0;
             }
             this.amts[index] += Math.floor(qty);
-            console.log("Add " + qty + " to " + this.amts[index]);
         },
     });
 

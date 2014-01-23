@@ -45,19 +45,20 @@ define(["common", "./quests", "./inventory"], function(common, Quest, Inventory)
 
             ptQuest.addRequirement({
                 pointsGained : 100,
+                
             });
 
             ptQuest.activate(player);
 
             setInterval(function() {
-               player.testEvent();
+                player.testEvent();
             }, 500);
 
         },
 
         testEvent : function() {
 
-            var option = Math.floor(Math.random() * 3);
+            var option = Math.floor(Math.random() * 10);
             switch(option) {
                 case 0:
                     var qty = Math.floor(Math.random() * 10) + 1;
@@ -76,7 +77,23 @@ define(["common", "./quests", "./inventory"], function(common, Quest, Inventory)
                 case 1:
 
                     app.addToNewsFeed({
-                        html : "The " + utilities.words.getRandomWord() + "are requesting help!",
+                        html : "The " + utilities.words.getRandomWord() + " request help!",
+                        timeout : 2200,
+                    });
+                    break;
+
+                case 2:
+
+                    app.addToNewsFeed({
+                        html : "Star " + utilities.words.getRandomWord() + " has created a " + app.getRandomElement().name + " planet",
+                        timeout : 2200,
+                    });
+                    break;
+
+                case 3:
+
+                    app.addToNewsFeed({
+                        html : "Star " + utilities.words.getRandomWord() + " progressed from a " + app.getRandomStarState() + " to a " + app.getRandomStarState(),
                         timeout : 2200,
                     });
                     break;
@@ -111,9 +128,11 @@ define(["common", "./quests", "./inventory"], function(common, Quest, Inventory)
             this.inventory.updateElement(element);
 
         },
+        
         getItem : function(item) {
 
         },
+        
         getQuest : function(quest) {
             quest.player = this;
             questManager.addQuest(quest);

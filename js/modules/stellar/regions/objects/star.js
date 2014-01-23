@@ -6,6 +6,17 @@ define(["common", "./pointObject"], function(common, PointObject) {
 
         init : function(p) {
             this._super(p);
+
+var obj = this;
+            this.onClick(function() {
+                console.log("Clicked " + this);
+
+                app.openCentralPopupObjInfo(obj, function() {
+                    app.zoomToInspect(obj);
+                });
+
+            });
+            
             this.bgColor = new common.KColor(.3 + .3 * Math.random(1), .3, 1);
             this.radius = 10;
             this.points = Math.random() * 2 + 5;
