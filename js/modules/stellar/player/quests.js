@@ -125,6 +125,11 @@ define(["common"], function(common) {
                 });
             }
             this.isCompleted = true;
+            
+            app.addToNewsFeed({
+                html : app.makeSpanColor("green", "Quest Completed! ") + this.title,
+                timeout : 2500,
+            });
         },
         toString : function() {
             return this.title + utilities.inSquareBrackets(this.requirements);
@@ -158,8 +163,9 @@ define(["common"], function(common) {
 
             if (reqs.pointsGained) {
                 var gained = app.player.points - this.startPoints;
-                console.log(gained);
+                console.log("onGetPoints: Player has gained " + gained + " points since quest start");
                 if (gained > reqs.pointsGained) {
+                	console.log("REQUIREMENTS MET. Check?");
                     this.satisfied.pointsGained = true;
                     this.check();
                 }
@@ -179,6 +185,7 @@ define(["common"], function(common) {
                 }
             }
             if (satisfied) {
+            	console.log("QUEST IS FULLY COMPLETED! Calling onSuccess()");
                 if (this.onSuccess)
                     this.onSuccess();
             }

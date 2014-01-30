@@ -44,7 +44,7 @@ define(["common", "./quests", "./inventory"], function(common, Quest, Inventory)
             });
 
             ptQuest.addRequirement({
-                pointsGained : 100,
+                pointsGained : 10,
                 
             });
 
@@ -114,6 +114,8 @@ define(["common", "./quests", "./inventory"], function(common, Quest, Inventory)
 
         getPoints : function(pts) {
             this.points += pts;
+            console.log("Player got points! " + pts);
+            
             this.applyToHandlers("getPoints", [pts]);
 
             // Were any quests waiting for points?

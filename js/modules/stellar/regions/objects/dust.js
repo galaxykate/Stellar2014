@@ -13,6 +13,46 @@ define(["common", "./pointObject", "../../elements/elements"], function(common, 
             // Fill the bag with stuff
             var quality = Math.random() * Math.random();
             this.contents.fill(Math.random() * 10, quality);
+            
+            this.onClick(function() {
+                console.log("GET RID OF ME " + this);
+                
+                var qty, element, color;
+                var introHtml = "Gathered ";
+                var dustHtml = "";
+                var points = 0;
+
+                //Send the dust to the player
+                for (var i = 0; i < Elements.elements.length; i++) {
+	                if(this.contents.amts[i] > 0){
+	                	qty = this.contents.amts[i];
+	                	element = app.getElement(i);
+	                	color = element.idColor.toCSS();
+	                	
+	                	if(dustHtml !== "") dustHtml += ", ";
+	                	dustHtml += app.makeSpanColor(color, qty + " " + element.name);
+	                	
+	                	app.player.getElement(element, qty);
+	                	points += qty;
+	            	}
+	            }
+	            
+	            if(dustHtml !== ""){
+		            app.addToNewsFeed({
+	                    html : introHtml + dustHtml,
+	                    timeout : 3000,
+	                });
+	                app.player.getPoints(points);
+                } else {
+               		app.addToNewsFeed({
+	                    html : "Sorry! That dust was empty for some reason!",
+	                    timeout : 1600,
+	                });
+                }
+                
+                this.remove();
+            });
+
         },
 
         drawDetails : function(context) {
