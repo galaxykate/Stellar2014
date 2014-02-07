@@ -19,7 +19,7 @@ define(["common", "./quests", "./inventory"], function(common, Quest, Inventory)
             utilities.addHandlers(player, playerActions);
 
             // Which actions should trigger a quest-completion check?
-
+            // Defined at the bottom of this file
             this.onGetElement(function(element, qty) {
 
             });
@@ -39,7 +39,12 @@ define(["common", "./quests", "./inventory"], function(common, Quest, Inventory)
                     reward : {
                         points : 200,
                     },
-                    popupText : "Well done, have some more points"
+                    popupText : "Well done, have some more points",
+                    execute: function(lib, quest){ 
+	                    	console.log("executing...");
+	                    	console.log(quest);
+	                    	lib.generatePtQuest(lib, quest); 
+                    	}
                 }
             });
 
@@ -49,10 +54,22 @@ define(["common", "./quests", "./inventory"], function(common, Quest, Inventory)
             });
 
             ptQuest.activate(player);
+            
+            // Test action quest
+            var actQuest = new Quest({
+            	id : "action0",
+                title : "Click more than once",
+            });
+            
+            actQuest.addRequirement({
+            	useControl : ["click", "click", "click"],
+            });
+            
+            //actQuest.activate(player);
 
-            setInterval(function() {
-                player.testEvent();
-            }, 500);
+            //setInterval(function() {
+            //    player.testEvent();
+            //}, 500);
 
         },
 
@@ -139,6 +156,19 @@ define(["common", "./quests", "./inventory"], function(common, Quest, Inventory)
             quest.player = this;
             questManager.addQuest(quest);
         },
+        
+        // ctrlName: easy shorthand for the control's name
+        //		ie "zoom" "exitStar" "waggleMouse"
+        // options: any additional parameters related to the control used, wrapped in an object
+        useControl : function(ctrlName, options) {
+        	console.log("Player used control '" + ctrlName + "'");
+        	//this.applyToHandlers("useControl", [ctrlName, options]);
+        	
+        	// Were any quests waiting for these events?
+            this.questManager.applyToActiveQuestsRequirements(function(req) {
+                req.onUseAction(ctrlName, options);
+            });
+        }
     });
 
     return Player;

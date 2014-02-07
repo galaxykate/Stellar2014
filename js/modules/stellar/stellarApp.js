@@ -266,6 +266,8 @@ define(["ui", "app", "common", "./universe", "./universeCamera", "./tuning", "./
                 if (universe.touch.overObject) {
                     universe.touch.overObject.click();
                 }
+                
+                app.player.useControl("click");
             });
 
             touchDraw.onDblTap(function(touchwindow, p) {

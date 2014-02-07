@@ -2,7 +2,7 @@
  * @author Kate Compton
  */
 
-define(["common"], function(common) {
+define(["common", "./questLibrary"], function(common, QuestLibrary) {
 
     // What makes a quest chain?
     //
@@ -11,6 +11,8 @@ define(["common"], function(common) {
         init : function() {
             this.activeQuests = [];
             this.completedQuests = [];
+            this.questLibrary = new QuestLibrary(this);
+            this.Quest = Quest;
         },
 
         addActive : function(quest) {
@@ -36,7 +38,7 @@ define(["common"], function(common) {
             this.activeQuests = this.activeQuests.filter(function(quest) {
                 if (quest.isCompleted) {
                     qm.completedQuests.push(quest);
-                    console.log("  Cleanup compelte quest:" + quest);
+                    console.log("  Cleanup complete quest:" + quest);
                     return false;
                 }
                 return true;
@@ -69,7 +71,16 @@ define(["common"], function(common) {
             }
 
             player.questManager.addActive(this);
-
+			
+			if(this.onStart){
+				this.onStartEvents(this.onStart);
+			}
+        },
+        
+        onStartEvents : function(start){
+        	console.log("Working on onStartEvents for quest " + this.id);
+        	
+        	// TO DO: Something with popup texts
         },
 
         addTextChain : function() {
@@ -117,6 +128,12 @@ define(["common"], function(common) {
 
             // remove this from active quests
             console.log("Completed " + this);
+            
+            // Checking onEnd must come before nextQuests
+            // To generate next quests, I put them in "onEnd"
+            if(this.onEnd){
+				this.onEndEvents(this.onEnd);
+			}
 
             if (this.nextQuests) {
                 console.log("..start " + this.nextQuests + " new quests");
@@ -131,6 +148,16 @@ define(["common"], function(common) {
                 timeout : 2500,
             });
         },
+        
+        onEndEvents : function(end){
+        	console.log("Working on onEndEvents for quest " + this.id);
+        	console.log(end);
+        	// TO DO: Something with popup texts
+        	// TO DO: Something with rewards
+        	
+        	//if(end.execute) end.execute(this.player.questManager.questLibrary, this);
+        },
+        
         toString : function() {
             return this.title + utilities.inSquareBrackets(this.requirements);
         }
@@ -170,6 +197,38 @@ define(["common"], function(common) {
                     this.check();
                 }
             }
+        },
+        
+        onUseAction : function(ctrlName, options){
+        	var reqs = this.requirements;
+        	
+        	if(reqs.useControl){
+        		console.log("Quest detected that needs a control used");
+        		console.log(reqs.useControl);
+        		
+        		var foundAt = -1;
+        		for(var i = 0; i < reqs.useControl.length; i++){
+        			if(ctrlName === reqs.useControl[i]){
+        				foundAt = i;
+        				console.log("Required action for quest found at quest requirements index " + i);
+        				break;
+        			}
+        		}
+        		
+        		if(foundAt !== -1){
+        			console.log("This WAS a control that was needed for the quest!!!");
+        			reqs.useControl.splice(foundAt, 1);
+        		} else{
+        			console.log("This was not a control that was needed for the quest");
+        			
+        		}
+        		
+        		if(reqs.useControl.length === 0){
+        			console.log("REQUIREMENTS MET. Check?");
+                    this.satisfied.useControl = true;
+                    this.check();
+        		}
+        	}
         },
 
         check : function() {
