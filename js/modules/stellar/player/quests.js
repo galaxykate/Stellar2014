@@ -47,6 +47,11 @@ define(["common", "./questLibrary"], function(common, QuestLibrary) {
             app.log(this.activeQuests.length + " quests active!");
             app.log(this.completedQuests.length + " quests complete!");
         },
+        
+        makeQuestObj : function(settings) {
+        	var quest = new Quest(settings);
+        	return quest;
+        }
     });
 
     // id, title
@@ -59,6 +64,10 @@ define(["common", "./questLibrary"], function(common, QuestLibrary) {
             this.requirements = [];
             console.log("Create quest: " + this);
             this.isCompleted = false;
+        },
+        
+        getRequirements : function() {
+        	return this.requirements;
         },
 
         activate : function(player) {
@@ -78,7 +87,7 @@ define(["common", "./questLibrary"], function(common, QuestLibrary) {
         },
         
         onStartEvents : function(start){
-        	console.log("Working on onStartEvents for quest " + this.id);
+        	//console.log("Working on onStartEvents for quest " + this.id);
         	
         	// TO DO: Something with popup texts
         },
@@ -150,12 +159,10 @@ define(["common", "./questLibrary"], function(common, QuestLibrary) {
         },
         
         onEndEvents : function(end){
-        	console.log("Working on onEndEvents for quest " + this.id);
-        	console.log(end);
         	// TO DO: Something with popup texts
         	// TO DO: Something with rewards
         	
-        	//if(end.execute) end.execute(this.player.questManager.questLibrary, this);
+        	if(end.execute) end.execute(this.player, this.player.questManager, this);
         },
         
         toString : function() {

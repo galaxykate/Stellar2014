@@ -40,10 +40,10 @@ define(["common", "./quests", "./inventory"], function(common, Quest, Inventory)
                         points : 200,
                     },
                     popupText : "Well done, have some more points",
-                    execute: function(lib, quest){ 
-	                    	console.log("executing...");
-	                    	console.log(quest);
-	                    	lib.generatePtQuest(lib, quest); 
+                    execute: function(player, manager, quest){ 
+	                    	//console.log("executing...");
+	                    	//console.log(quest);
+	                    	manager.questLibrary.generatePtQuest(player, manager, quest); 
                     	}
                 }
             });
